@@ -38,18 +38,18 @@ api = "0.7"
     name = "BP_POSTGRES_ENABLE"
 
   [[metadata.dependencies]]
-    cpes = ["cpe:2.3:a:newrelic:java-agent:7.4.3:*:*:*:*:*:*:*"]
-    id = "newrelic-java-agent"
-    name = "New Relic Java Agent"
-    purl = "pkg:generic/newrelic-java-agent@7.4.3"
-    sha256 = "232eda66caa1bea248de8c6dbf22af5b0e070b4d3b61b66569fe3b5515698bfa"
+    cpes = ["cpe:2.3:a:postgresql:postgresql:42.3.1:*:*:*:*:*:*:*"]
+    id = "postgres-driver"
+    name = "Postgres JDBC driver"
+    purl = "pkg:generic/postgres-driver@42.3.1"
+    sha256 = "8370570857da86eb4a76dd3d8505d34bac0c18186741fa83a6820a10fa441cb4"
     stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/7.4.3/newrelic-agent-7.4.3.jar"
-    version = "7.4.3"
+    uri = "https://repo1.maven.org/maven2/org/postgresql/postgresql/42.3.1/postgresql-42.3.1.jar"
+    version = "42.3.1"
 
     [[metadata.dependencies.licenses]]
-      type = "Apache"
-      uri = "https://github.com/newrelic/newrelic-java-agent/blob/main/LICENSE"
+      type = "BSD-2-Clause"
+      uri = "https://jdbc.postgresql.org/about/license.html"
 
 [[stacks]]
   id = "io.buildpacks.stacks.bionic"

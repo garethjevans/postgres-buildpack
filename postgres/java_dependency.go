@@ -26,21 +26,21 @@ import (
  * limitations under the License.
  */
 
-type JavaAgent struct {
+type JavaDependency struct {
 	LayerContributor libpak.DependencyLayerContributor
 	Logger           bard.Logger
 }
 
-func NewJavaAgent(dependency libpak.BuildpackDependency, cache libpak.DependencyCache) (JavaAgent, libcnb.BOMEntry) {
+func NewJavaDependency(dependency libpak.BuildpackDependency, cache libpak.DependencyCache) (JavaDependency, libcnb.BOMEntry) {
 	contributor, entry := libpak.NewDependencyLayer(dependency, cache, libcnb.LayerTypes{
 		Launch: true,
 	})
-	return JavaAgent{
+	return JavaDependency{
 		LayerContributor: contributor,
 	}, entry
 }
 
-func (j JavaAgent) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
+func (j JavaDependency) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 	j.LayerContributor.Logger = j.Logger
 
 	return j.LayerContributor.Contribute(layer, func(artifact *os.File) (libcnb.Layer, error) {
@@ -52,13 +52,12 @@ func (j JavaAgent) Contribute(layer libcnb.Layer) (libcnb.Layer, error) {
 		}
 
 		layer.LaunchEnvironment.Appendf("CLASSPATH", ":", "%s", file)
-		//layer.LaunchEnvironment.Default("NEW_RELIC_AGENT_ENABLED", "true")
 
 		return layer, nil
 	})
 
 }
 
-func (j JavaAgent) Name() string {
+func (j JavaDependency) Name() string {
 	return j.LayerContributor.LayerName()
 }

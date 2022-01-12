@@ -55,12 +55,12 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve postgres-buildpack plan entry\n%w", err)
 	} else if ok {
 		// resolve the dependency to copy into the layer
-		dep, err := dr.Resolve("newrelic-java-agent", "")
+		dep, err := dr.Resolve("postgres-driver", "")
 		if err != nil {
 			return libcnb.BuildResult{}, fmt.Errorf("unable to find dependency\n%w", err)
 		}
 
-		ja, be := NewJavaAgent(dep, dc)
+		ja, be := NewJavaDependency(dep, dc)
 		ja.Logger = b.Logger
 		result.Layers = append(result.Layers, ja)
 		if be.Name != "" {
