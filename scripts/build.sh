@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-env GOOS="linux" go build -ldflags='-s -w' -o bin/helper github.com/garethjevans/simple-buildpack/cmd/helper
-env GOOS="linux" go build -ldflags='-s -w' -o bin/main github.com/garethjevans/simple-buildpack/cmd/main
+env GOOS="linux" go build -ldflags='-s -w' -o bin/helper github.com/garethjevans/postgres-buildpack/cmd/helper
+env GOOS="linux" go build -ldflags='-s -w' -o bin/main github.com/garethjevans/postgres-buildpack/cmd/main
 
 if [ "${STRIP:-false}" != "false" ]; then
   strip bin/helper bin/main

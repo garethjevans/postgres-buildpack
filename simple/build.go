@@ -51,8 +51,8 @@ func (b Build) Build(context libcnb.BuildContext) (libcnb.BuildResult, error) {
 	}
 	dc.Logger = b.Logger
 
-	if _, ok, err := pr.Resolve("simple-buildpack"); err != nil {
-		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve simple-buildpack plan entry\n%w", err)
+	if _, ok, err := pr.Resolve("postgres-buildpack"); err != nil {
+		return libcnb.BuildResult{}, fmt.Errorf("unable to resolve postgres-buildpack plan entry\n%w", err)
 	} else if ok {
 		// resolve the dependency to copy into the layer
 		dep, err := dr.Resolve("newrelic-java-agent", "")

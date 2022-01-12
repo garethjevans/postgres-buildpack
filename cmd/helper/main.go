@@ -19,7 +19,7 @@ package main
 import (
 	"fmt"
 	"github.com/buildpacks/libcnb"
-	"github.com/garethjevans/simple-buildpack/helper"
+	"github.com/garethjevans/postgres-buildpack/helper"
 	"os"
 
 	"github.com/paketo-buildpacks/libpak/bard"

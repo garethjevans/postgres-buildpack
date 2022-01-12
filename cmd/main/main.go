@@ -17,7 +17,7 @@
 package main
 
 import (
-	"github.com/garethjevans/simple-buildpack/simple"
+	"github.com/garethjevans/postgres-buildpack/simple"
 	"os"
 
 	"github.com/paketo-buildpacks/libpak"

@@ -1,4 +1,4 @@
-# `ghcr.io/garethjevans/simple-buildpack`
+# `ghcr.io/garethjevans/postgres-buildpack`
 
 Build this buildpack locally with `make build`
 

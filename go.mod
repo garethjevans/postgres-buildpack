@@ -1,4 +1,4 @@
-module github.com/garethjevans/simple-buildpack
+module github.com/garethjevans/postgres-buildpack
 
 go 1.17
 

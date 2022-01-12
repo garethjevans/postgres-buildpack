@@ -44,10 +44,10 @@ func (d Detect) Detect(_ libcnb.DetectContext) (libcnb.DetectResult, error) {
 		Plans: []libcnb.BuildPlan{
 			{
 				Provides: []libcnb.BuildPlanProvide{
-					{Name: "simple-buildpack"},
+					{Name: "postgres-buildpack"},
 				},
 				Requires: []libcnb.BuildPlanRequire{
-					{Name: "simple-buildpack"},
+					{Name: "postgres-buildpack"},
 					{Name: "jvm-application"},
 				},
 			},
