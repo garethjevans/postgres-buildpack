@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package simple
+package postgres
 
 import (
 	"github.com/buildpacks/libcnb"
@@ -28,9 +28,9 @@ type Detect struct {
 
 func (d Detect) Detect(_ libcnb.DetectContext) (libcnb.DetectResult, error) {
 	d.Logger.Info("Detect....")
-	d.Logger.Info("Resolving BP_SIMPLE_BUILDPACK....")
-	enableBuildpack := sherpa.ResolveBool("BP_SIMPLE_BUILDPACK")
-	d.Logger.Infof("Found BP_SIMPLE_BUILDPACK=%s", enableBuildpack)
+	d.Logger.Info("Resolving BP_POSTGRES_ENABLE....")
+	enableBuildpack := sherpa.ResolveBool("BP_POSTGRES_ENABLE")
+	d.Logger.Infof("Found BP_POSTGRES_ENABLE=%s", enableBuildpack)
 
 	if !enableBuildpack {
 		d.Logger.Infof("not enabled")

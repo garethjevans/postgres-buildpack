@@ -17,7 +17,7 @@
 package main
 
 import (
-	"github.com/garethjevans/postgres-buildpack/simple"
+	"github.com/garethjevans/postgres-buildpack/postgres"
 	"os"
 
 	"github.com/paketo-buildpacks/libpak"
@@ -26,7 +26,7 @@ import (
 
 func main() {
 	libpak.Main(
-		simple.Detect{Logger: bard.NewLogger(os.Stderr)},
-		simple.Build{Logger: bard.NewLogger(os.Stdout)},
+		postgres.Detect{Logger: bard.NewLogger(os.Stderr)},
+		postgres.Build{Logger: bard.NewLogger(os.Stdout)},
 	)
 }
