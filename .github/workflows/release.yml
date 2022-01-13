@@ -183,11 +183,11 @@ jobs:
                   --field "body=${RELEASE_BODY//<!-- DIGEST PLACEHOLDER -->/\`${DIGEST}\`}"
               env:
                 DIGEST: ${{ steps.package.outputs.digest }}
-                GITHUB_TOKEN: ${{ secrets.GH_CLI_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.JAVA_GITHUB_TOKEN }}
             - if: ${{ false }}
               uses: docker://ghcr.io/buildpacks/actions/registry/request-add-entry:4.5.0
               with:
-                address: ghcr.io/ktronkowski/newrelic-java-agent@${{ steps.package.outputs.digest }}
-                id: paketo-buildpacks/newrelic-java-agent
+                address: ghcr.io/garethjevans/postgres-buildpack@${{ steps.package.outputs.digest }}
+                id: garethjevans/postgres-buildpack
                 token: ${{ secrets.JAVA_GITHUB_TOKEN }}
                 version: ${{ steps.version.outputs.version }}
