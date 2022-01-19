@@ -43,6 +43,7 @@ func (c Properties) Execute() (map[string]string, error) {
 	if b, ok, err := bindings.ResolveOne(c.Bindings, bindings.OfType(BindingName)); err != nil {
 		return nil, fmt.Errorf("unable to resolve single binding %s\n%w", BindingName, err)
 	} else if ok {
+		c.Logger.Infof("Found binding %+v", b)
 		if p, ok := b.SecretFilePath("url"); ok {
 			c.Logger.Info("Configuring POSTGRES_URL")
 			contents, err := c.GetContents(p)
@@ -78,6 +79,7 @@ func (c Properties) Execute() (map[string]string, error) {
 
 func (c Properties) GetContents(path string) (string, error) {
 	if c.FileReader == nil {
+		c.Logger.Infof("getting secret from path %s", path)
 		b, err := ioutil.ReadFile(path)
 		if err != nil {
 			return "", fmt.Errorf("unable to read secret file %s\n%w", path, err)
