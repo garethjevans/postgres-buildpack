@@ -19,6 +19,7 @@ package postgres
 import (
 	"github.com/buildpacks/libcnb"
 	"github.com/paketo-buildpacks/libpak/bard"
+	"github.com/paketo-buildpacks/libpak/bindings"
 	"github.com/paketo-buildpacks/libpak/sherpa"
 )
 
@@ -26,18 +27,33 @@ type Detect struct {
 	Logger bard.Logger
 }
 
-func (d Detect) Detect(_ libcnb.DetectContext) (libcnb.DetectResult, error) {
-	d.Logger.Info("Detect....")
-	d.Logger.Info("Resolving BP_POSTGRES_ENABLE....")
-	enableBuildpack := sherpa.ResolveBool("BP_POSTGRES_ENABLE")
-	d.Logger.Infof("Found BP_POSTGRES_ENABLE=%s", enableBuildpack)
+func (d Detect) Detect(dc libcnb.DetectContext) (libcnb.DetectResult, error) {
 
-	if !enableBuildpack {
-		d.Logger.Infof("not enabled")
+	// check the binding first
+	if _, ok, err := bindings.ResolveOne(dc.Platform.Bindings, bindings.OfType("postgresql")); err != nil {
 		return libcnb.DetectResult{Pass: false}, nil
+	} else if ok {
+		return libcnb.DetectResult{
+			Pass: true,
+			Plans: []libcnb.BuildPlan{
+				{
+					Provides: []libcnb.BuildPlanProvide{
+						{Name: "postgres-buildpack"},
+					},
+					Requires: []libcnb.BuildPlanRequire{
+						{Name: "postgres-buildpack"},
+						{Name: "jvm-application"},
+					},
+				},
+			},
+		}, nil
 	}
 
-	d.Logger.Infof("enabled!!!")
+	d.Logger.Info("Binding 'postgresql' not found, falling back on env var BP_POSTGRES_ENABLE....")
+
+	if !sherpa.ResolveBool("BP_POSTGRES_ENABLE") {
+		return libcnb.DetectResult{Pass: false}, nil
+	}
 
 	return libcnb.DetectResult{
 		Pass: true,
