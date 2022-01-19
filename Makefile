@@ -22,3 +22,7 @@ build/postgres-buildpack: create-package
 build/package.toml:
 	./scripts/create-package-config.sh ./build/package.toml ./postgres-buildpack "$(OS)"
 	cat ./build/package.toml
+
+
+test:
+	go test ./...
