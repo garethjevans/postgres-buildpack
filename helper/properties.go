@@ -28,11 +28,11 @@ var (
 	BindingName = "postgresql"
 )
 
-type ContentsGetter func(string) (string,error)
+type ContentsGetter func(string) (string, error)
 
 type Properties struct {
-	Bindings libcnb.Bindings
-	Logger   bard.Logger
+	Bindings   libcnb.Bindings
+	Logger     bard.Logger
 	FileReader ContentsGetter
 }
 
@@ -70,6 +70,8 @@ func (c Properties) Execute() (map[string]string, error) {
 			environment["POSTGRES_PASS"] = contents
 		}
 	}
+
+	c.Logger.Infof("Environment = %s", environment)
 
 	return environment, nil
 }
