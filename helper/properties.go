@@ -21,25 +21,67 @@ import (
 	"github.com/buildpacks/libcnb"
 	"github.com/paketo-buildpacks/libpak/bard"
 	"github.com/paketo-buildpacks/libpak/bindings"
+	"io/ioutil"
 )
+
+var (
+	BindingName = "postgresql"
+)
+
+type ContentsGetter func(string) (string,error)
 
 type Properties struct {
 	Bindings libcnb.Bindings
 	Logger   bard.Logger
+	FileReader ContentsGetter
 }
 
 func (c Properties) Execute() (map[string]string, error) {
-	c.Logger.Info("Configuring Simple Buildpack properties")
+	c.Logger.Info("Configuring Postgres properties")
 	environment := make(map[string]string)
 
-	if b, ok, err := bindings.ResolveOne(c.Bindings, bindings.OfType("Simple Buildpack")); err != nil {
-		return nil, fmt.Errorf("unable to resolve single binding SimpleBuildpack\n%w", err)
+	if b, ok, err := bindings.ResolveOne(c.Bindings, bindings.OfType(BindingName)); err != nil {
+		return nil, fmt.Errorf("unable to resolve single binding %s\n%w", BindingName, err)
 	} else if ok {
-		if p, ok := b.SecretFilePath("licenseKey"); ok {
-			c.Logger.Info("Configuring a random license key")
-			environment["SIMPLE_BUILDPACK_LICENSE_KEY"] = p
+		if p, ok := b.SecretFilePath("url"); ok {
+			c.Logger.Info("Configuring POSTGRES_URL")
+			contents, err := c.GetContents(p)
+			if err != nil {
+				return nil, err
+			}
+			environment["POSTGRES_URL"] = contents
+		}
+
+		if p, ok := b.SecretFilePath("username"); ok {
+			c.Logger.Info("Configuring POSTGRES_USER")
+			contents, err := c.GetContents(p)
+			if err != nil {
+				return nil, err
+			}
+			environment["POSTGRES_USER"] = contents
+		}
+
+		if p, ok := b.SecretFilePath("password"); ok {
+			c.Logger.Info("Configuring POSTGRES_PASS")
+			contents, err := c.GetContents(p)
+			if err != nil {
+				return nil, err
+			}
+			environment["POSTGRES_PASS"] = contents
 		}
 	}
 
 	return environment, nil
+}
+
+func (c Properties) GetContents(path string) (string, error) {
+	if c.FileReader == nil {
+		b, err := ioutil.ReadFile(path)
+		if err != nil {
+			return "", fmt.Errorf("unable to read secret file %s\n%w", path, err)
+		}
+		return string(b), nil
+	} else {
+		return c.FileReader(path)
+	}
 }
