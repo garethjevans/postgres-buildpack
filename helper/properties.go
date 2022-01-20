@@ -78,7 +78,7 @@ func (c Properties) Execute() (map[string]string, error) {
 
 		c.Logger.Infof("Environment = %s", environment)
 	} else {
-		c.Logger.Info("Skipping configurin 'postgresql' properties")
+		c.Logger.Info("Skipping configuring 'postgresql' properties, BPL_POSTGRES_PROPERTIES_ENABLE is false or empty")
 	}
 
 	return environment, nil
