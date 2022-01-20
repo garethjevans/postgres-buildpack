@@ -37,6 +37,13 @@ api = "0.7"
     build = true
     name = "BP_POSTGRES_ENABLE"
 
+  [[metadata.configurations]]
+    default = "false"
+    description = "enables the postgres properties on startup"
+    launch = true
+    name = "BPL_POSTGRES_PROPERTIES_ENABLE"
+
+
   [[metadata.dependencies]]
     cpes = ["cpe:2.3:a:postgresql:postgresql_jdbc_driver:42.3.1:*:*:*:*:*:*:*"]
     id = "postgres-driver"
