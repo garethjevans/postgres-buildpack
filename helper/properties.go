@@ -21,6 +21,7 @@ import (
 	"github.com/buildpacks/libcnb"
 	"github.com/paketo-buildpacks/libpak/bard"
 	"github.com/paketo-buildpacks/libpak/bindings"
+	"github.com/paketo-buildpacks/libpak/sherpa"
 	"io/ioutil"
 )
 
@@ -37,42 +38,48 @@ type Properties struct {
 }
 
 func (c Properties) Execute() (map[string]string, error) {
-	c.Logger.Info("Configuring Postgres properties")
+	enabled := sherpa.ResolveBool("BPL_POSTGRES_PROPERTIES_ENABLE")
 	environment := make(map[string]string)
 
-	if b, ok, err := bindings.ResolveOne(c.Bindings, bindings.OfType(BindingName)); err != nil {
-		return nil, fmt.Errorf("unable to resolve single binding %s\n%w", BindingName, err)
-	} else if ok {
-		c.Logger.Infof("Found binding %+v", b)
-		if p, ok := b.SecretFilePath("url"); ok {
-			c.Logger.Info("Configuring POSTGRES_URL")
-			contents, err := c.GetContents(p)
-			if err != nil {
-				return nil, err
+	if enabled {
+		c.Logger.Info("Configuring 'postgresql' properties")
+
+		if b, ok, err := bindings.ResolveOne(c.Bindings, bindings.OfType(BindingName)); err != nil {
+			return nil, fmt.Errorf("unable to resolve single binding %s\n%w", BindingName, err)
+		} else if ok {
+			c.Logger.Infof("Found binding %+v", b)
+			if p, ok := b.SecretFilePath("url"); ok {
+				c.Logger.Info("Configuring POSTGRES_URL")
+				contents, err := c.GetContents(p)
+				if err != nil {
+					return nil, err
+				}
+				environment["POSTGRES_URL"] = contents
 			}
-			environment["POSTGRES_URL"] = contents
+
+			if p, ok := b.SecretFilePath("username"); ok {
+				c.Logger.Info("Configuring POSTGRES_USER")
+				contents, err := c.GetContents(p)
+				if err != nil {
+					return nil, err
+				}
+				environment["POSTGRES_USER"] = contents
+			}
+
+			if p, ok := b.SecretFilePath("password"); ok {
+				c.Logger.Info("Configuring POSTGRES_PASS")
+				contents, err := c.GetContents(p)
+				if err != nil {
+					return nil, err
+				}
+				environment["POSTGRES_PASS"] = contents
+			}
 		}
 
-		if p, ok := b.SecretFilePath("username"); ok {
-			c.Logger.Info("Configuring POSTGRES_USER")
-			contents, err := c.GetContents(p)
-			if err != nil {
-				return nil, err
-			}
-			environment["POSTGRES_USER"] = contents
-		}
-
-		if p, ok := b.SecretFilePath("password"); ok {
-			c.Logger.Info("Configuring POSTGRES_PASS")
-			contents, err := c.GetContents(p)
-			if err != nil {
-				return nil, err
-			}
-			environment["POSTGRES_PASS"] = contents
-		}
+		c.Logger.Infof("Environment = %s", environment)
+	} else {
+		c.Logger.Info("Skipping configurin 'postgresql' properties")
 	}
-
-	c.Logger.Infof("Environment = %s", environment)
 
 	return environment, nil
 }
