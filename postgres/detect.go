@@ -42,7 +42,7 @@ func (d Detect) Detect(dc libcnb.DetectContext) (libcnb.DetectResult, error) {
 					},
 					Requires: []libcnb.BuildPlanRequire{
 						{Name: "postgres-buildpack"},
-						{Name: "jvm-application"},
+						{Name: "jre"},
 					},
 				},
 			},
@@ -64,7 +64,7 @@ func (d Detect) Detect(dc libcnb.DetectContext) (libcnb.DetectResult, error) {
 				},
 				Requires: []libcnb.BuildPlanRequire{
 					{Name: "postgres-buildpack"},
-					{Name: "jvm-application"},
+					{Name: "jre"},
 				},
 			},
 		},
